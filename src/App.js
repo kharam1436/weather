@@ -6,7 +6,6 @@ function App() {
     <div className="App">
       <main>
         <WeatherCard />
-        <WeatherCard />
       </main>
     </div>
   );

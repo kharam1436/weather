@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./WeatherCard.css";
-import { fetchWeather } from "../utils/getWeather";
+import { fetchCityWeather, fetchWeatherFromUserLocation } from "../utils/getWeather";
 
 // Simple contract:
 // - Props: city (string) optional, defaults to "Seattle"
@@ -11,11 +11,21 @@ const WeatherCard = ({ city = "Busan" }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(async () => {
-    setLoading(true);
-    const weatherData = await fetchWeather({city});
-    setData(weatherData);
-    setLoading(false);
+  useEffect(() => {
+
+    const load = async () => {
+      setLoading(true);
+      try { 
+        const weatherData = await fetchWeatherFromUserLocation();
+        setData(weatherData);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
   }, [city]);
 
   return (
