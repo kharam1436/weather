@@ -1,12 +1,12 @@
-import logo from './logo.svg';
 import './App.css';
+import WeatherCard from './components/WeatherCard';
 
 function App() {
   return (
     <div className="App">
-      <header></header>
-      <main></main>
-      <footer> </footer>
+      <main>
+        <WeatherCard />
+      </main>
     </div>
   );
 }
