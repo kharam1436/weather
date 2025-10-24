@@ -1,7 +1,7 @@
 .weather-header {
-    display:flex;
-	justify-content:space-between;
-	align-items:center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 /* reference: https://dev.to/kevinbism/recreating-apples-liquid-glass-effect-with-pure-css-3gpl */
@@ -11,14 +11,64 @@
   backdrop-filter: blur(2px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.8);
   border-radius: 1rem;
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2), 
-              inset 0 4px 20px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2),
+    inset 0 4px 20px rgba(255, 255, 255, 0.3);
 }
 
 .weather-card {
-	padding:18px;
-	display:grid;
-	grid-template-columns: 1fr 1fr;
-	gap:18px;
-	align-items:start;
+  padding: 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+/* Weather card specifics */
+.temp {
+  font-size: 48px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.condition {
+  display: flex;
+  align-items: center;
+}
+
+.weather-icon {
+  vertical-align: middle;
+  width: 48px;
+  height: 48px;
+}
+
+.condition-text {
+  text-transform: capitalize;
+  margin-left: 8px;
+}
+
+.hi-lo {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+}
+
+.feels {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.95rem;
+}
+
+.updated {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.error {
+  color: #ffdddd;
+  background: rgba(255, 0, 0, 0.06);
+  border-radius: 6px;
 }
