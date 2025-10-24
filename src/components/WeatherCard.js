@@ -14,7 +14,10 @@ const WeatherCard = () => {
 
   return (
     <div>
-        <header>{current.location}</header>
+        <header className="weather-header">
+            <h2>{current.location}</h2>
+            <div className="updated">{current.updated}</div>
+        </header>
       <main className="glass weather-card">
         <div className="temp">{current.temp}°</div>
         <div className="details">
