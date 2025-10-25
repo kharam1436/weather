@@ -12,4 +12,57 @@ body{
 	color:#e6eef6;
 }
 
+.App {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.app-layout {
+	flex: 1;
+	display: flex;
+	gap: 24px;
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto 0 0;
+	padding: 40px 32px 40px 0;
+	box-sizing: border-box;
+}
+
+.sidebar {
+	width: 220px;
+	flex: 0 0 220px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding-right: 4px;
+	overflow-y: auto;
+}
+
+.content {
+	flex: 1;
+	padding: 12px 0;
+	overflow-y: auto;
+}
+
+@media (max-width: 960px) {
+	.app-layout {
+		flex-direction: column;
+		padding: 24px 20px 24px 0;
+	}
+
+	.sidebar {
+		width: 100%;
+		flex: none;
+		flex-direction: row;
+		overflow-x: auto;
+		overflow-y: hidden;
+		gap: 12px;
+	}
+
+	.content {
+		padding-top: 16px;
+	}
+}
+
 

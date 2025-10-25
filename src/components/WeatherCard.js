@@ -7,7 +7,7 @@ import { fetchCityWeather, fetchWeatherFromUserLocation } from "../utils/getWeat
 // - Output: current weather card with temp, description, hi/lo, feels like, icon
 // - Errors: shows an error message when fetch fails or when API key missing
 
-const WeatherCard = ({ city }) => {
+const WeatherCard = ({ city, label, isActive = false, onSelect, onWeatherLoaded }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -16,13 +16,18 @@ const WeatherCard = ({ city }) => {
     const load = async () => {
       setLoading(true);
       try {
-        if(!city) {
-            console.log("No city provided, fetching weather from user location");
-            const weatherData = await fetchWeatherFromUserLocation();
+    if(!city) {
+      const weatherData = await fetchWeatherFromUserLocation();
             setData(weatherData);
+              if (weatherData && onWeatherLoaded) {
+                onWeatherLoaded(weatherData);
+              }
         } else {
             const weatherData = await fetchCityWeather({ city });
             setData(weatherData);
+              if (weatherData && onWeatherLoaded) {
+                onWeatherLoaded(weatherData);
+              }
         }
       } catch (err) {
         console.error(err);
@@ -34,41 +39,69 @@ const WeatherCard = ({ city }) => {
     load();
   }, [city]);
 
-  return (
-    <div>
-      <header className="weather-header">
-        <h2>{data ? data.location : city}</h2>
-        <div className="updated">{data ? data.updated : loading ? "Loading..." : "-"}</div>
-      </header>
+  const handleSelect = () => {
+    if (loading || !data || !onSelect) {
+      return;
+    }
 
-      <main className="glass weather-card">
-        {loading ? (
-          <div className="loading">Loading weather...</div>
-        ) : data ? (
-          <>
-            <div className="temp">{data.temp}°</div>
-            <div className="details">
-              <div className="condition">
-                    {data.icon && (
-                      <img
-                        className="weather-icon"
-                        src={`https://openweathermap.org/img/wn/${data.icon}@2x.png`}
-                        alt={data.condition}
-                      />
-                    )}
-                    <span className="condition-text">{data.condition}</span>
-              </div>
-              <div className="hi-lo">
-                H:{data.high}° • L:{data.low}°
-              </div>
-              <div className="feels">Feels like {data.feelsLike}°</div>
+    onSelect(data);
+  };
+
+  const handleKeyDown = (event) => {
+    if (!onSelect) {
+      return;
+    }
+
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      handleSelect();
+    }
+  };
+
+  const title = data?.location || label || city || "Loading";
+  const conditionLabel = loading ? "Fetching weather..." : data ? data.condition : "No data";
+
+  return (
+    <article
+      className={`weather-card-wrapper${isActive ? " active" : ""}${loading ? " loading" : ""}${onSelect ? " selectable" : ""}`}
+      onClick={handleSelect}
+      onKeyDown={handleKeyDown}
+      role={onSelect ? "button" : undefined}
+      tabIndex={onSelect ? 0 : undefined}
+      aria-pressed={onSelect ? isActive : undefined}
+    >
+      <div className={`glass weather-card compact${loading ? " is-loading" : ""}`}>
+        <div className="weather-card__top">
+          <div className="weather-card__title">
+            <span className="weather-card__label">{title}</span>
+            <div className="weather-card__condition">
+              {!loading && data?.icon && (
+                <img
+                  className="weather-icon"
+                  src={`https://openweathermap.org/img/wn/${data.icon}@2x.png`}
+                  alt={data.condition}
+                />
+              )}
+              <span className="condition-text">{conditionLabel}</span>
             </div>
-          </>
-        ) : (
-          <div>No data</div>
-        )}
-      </main>
-    </div>
+          </div>
+          <div className="weather-card__metrics">
+            <div className="temp">{loading || !data ? "--" : `${data.temp}°`}</div>
+          </div>
+        </div>
+
+        <div className="weather-card__meta">
+          {data ? (
+            <>
+              <span className="hi-lo">H:{data.high}° • L:{data.low}°</span>
+              <span className="feels">Feels like {data.feelsLike}°</span>
+            </>
+          ) : (
+            <span className="hi-lo">{loading ? "Updating..." : "Weather unavailable"}</span>
+          )}
+        </div>
+      </div>
+    </article>
   );
 };
 
