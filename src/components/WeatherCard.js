@@ -7,7 +7,7 @@ import { fetchCityWeather, fetchWeatherFromUserLocation } from "../utils/getWeat
 // - Output: current weather card with temp, description, hi/lo, feels like, icon
 // - Errors: shows an error message when fetch fails or when API key missing
 
-const WeatherCard = ({ city = "Busan" }) => {
+const WeatherCard = ({ city }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -15,9 +15,15 @@ const WeatherCard = ({ city = "Busan" }) => {
 
     const load = async () => {
       setLoading(true);
-      try { 
-        const weatherData = await fetchWeatherFromUserLocation();
-        setData(weatherData);
+      try {
+        if(!city) {
+            console.log("No city provided, fetching weather from user location");
+            const weatherData = await fetchWeatherFromUserLocation();
+            setData(weatherData);
+        } else {
+            const weatherData = await fetchCityWeather({ city });
+            setData(weatherData);
+        }
       } catch (err) {
         console.error(err);
       } finally {
